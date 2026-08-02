@@ -1,0 +1,497 @@
+.app {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 48px 24px;
+}
+
+.app-header {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.app-header h1 {
+  font-size: 2rem;
+  letter-spacing: -0.02em;
+  margin-bottom: 8px;
+}
+
+.app-header p {
+  color: var(--text-muted);
+  font-size: 0.95rem;
+}
+
+.controls {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-bottom: 16px;
+}
+
+.generate-btn,
+.fetch-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 24px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #fff;
+  border: none;
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-md);
+  transition: all 0.2s ease;
+}
+
+.generate-btn {
+  background: var(--primary);
+}
+
+.fetch-btn {
+  background: var(--success);
+}
+
+.generate-btn:hover,
+.fetch-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-lg);
+}
+
+.generate-btn:hover {
+  background: var(--primary-hover);
+}
+
+.fetch-btn:hover {
+  background: #059669;
+}
+
+.generate-btn:active,
+.fetch-btn:active {
+  transform: translateY(0);
+  box-shadow: var(--shadow-sm);
+}
+
+.generate-btn:disabled,
+.fetch-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* 회차 입력 필드 */
+.draw-no-input {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  margin-bottom: 16px;
+}
+
+.draw-no-input input {
+  padding: 10px 16px;
+  font-size: 0.95rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+  color: var(--text-h);
+  width: 200px;
+  outline: none;
+  transition: border-color 0.2s ease;
+}
+
+.draw-no-input input:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px var(--primary-soft);
+}
+
+.draw-no-input button {
+  padding: 10px 20px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--primary);
+  background: var(--primary-soft);
+  border: 1px solid var(--primary);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.draw-no-input button:hover {
+  background: var(--primary);
+  color: #fff;
+}
+
+.draw-no-input button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* 번호 생성 이론 설명 영역 */
+.mode-description {
+  width: 100%;
+  max-width: 1200px;
+  margin: 16px 0;
+  padding: 20px 24px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-left: 4px solid var(--primary);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+  animation: fadeIn 0.3s ease;
+}
+
+.mode-description-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--text-h);
+  margin-bottom: 12px;
+}
+
+.mode-description-icon {
+  font-size: 1.3rem;
+}
+
+.mode-description-desc {
+  font-size: 0.95rem;
+  color: var(--text);
+  line-height: 1.6;
+  margin-bottom: 12px;
+}
+
+.mode-description-theory {
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  line-height: 1.7;
+  padding: 12px 16px;
+  background: var(--surface-hover);
+  border-radius: var(--radius-sm);
+}
+
+.mode-description-theory strong {
+  color: var(--primary);
+  font-weight: 700;
+}
+
+/* 에러 메시지 */
+.error-message {
+  color: var(--danger);
+  background: var(--danger-soft);
+  padding: 12px 20px;
+  border-radius: var(--radius-sm);
+  font-size: 0.9rem;
+  text-align: center;
+  margin: 16px 0;
+  border: 1px solid var(--danger);
+}
+
+.lottery-result {
+  width: 100%;
+  max-width: 480px;
+  margin: 32px auto;
+  padding: 28px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+  animation: fadeIn 0.3s ease;
+}
+
+.numbers {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.ball {
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #fff;
+  background: var(--primary);
+  border-radius: 50%;
+  box-shadow: var(--shadow-sm);
+  animation: popIn 0.3s ease;
+}
+
+.ball.bonus {
+  background: var(--success);
+}
+
+.bonus-label {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-size: 0.9rem;
+  color: var(--text-muted);
+}
+
+.bonus-label .ball {
+  width: 36px;
+  height: 36px;
+  font-size: 0.9rem;
+}
+
+.history-section {
+  width: 100%;
+  max-width: 1200px;
+  margin-top: 40px;
+}
+
+.history-section h2 {
+  font-size: 1.25rem;
+  margin-bottom: 16px;
+  color: var(--text-h);
+}
+
+.ag-theme-quartz {
+  width: 100%;
+  height: 600px;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-sm);
+}
+
+/* AG Grid 테마 커스터마이징 - 세련된 색상 */
+.ag-theme-quartz {
+  --ag-background-color: var(--surface);
+  --ag-header-background-color: transparent;
+  --ag-odd-row-background-color: var(--surface);
+  --ag-even-row-background-color: var(--surface);
+  --ag-row-hover-color: var(--primary-soft);
+  --ag-selected-row-background-color: var(--primary-soft);
+  --ag-border-color: var(--border);
+  --ag-header-foreground-color: #fff;
+  --ag-foreground-color: var(--text-h);
+  --ag-secondary-foreground-color: var(--text);
+  --ag-font-size: 14px;
+  --ag-font-family: inherit;
+  --ag-header-height: 150px;
+  --ag-row-height: 48px;
+  --ag-grid-size: 8px;
+  --ag-list-item-height: 40px;
+  --ag-cell-horizontal-padding: 16px;
+  --ag-borders: solid 1px;
+  --ag-border-radius: 0;
+  --ag-header-column-resize-handle-height: 100%;
+  --ag-header-column-resize-handle-width: 2px;
+  --ag-checkbox-checked-color: var(--primary);
+  --ag-checkbox-background-color: var(--surface);
+  --ag-checkbox-border-color: var(--border);
+  --ag-toggle-button-switch-border-color: var(--border);
+  --ag-toggle-button-off-background-color: var(--surface-hover);
+  --ag-toggle-button-on-background-color: var(--primary);
+  --ag-toggle-button-switch-on-background-color: var(--surface);
+  --ag-toggle-button-switch-off-background-color: var(--surface);
+  --ag-icon-font-color: #fff;
+  --ag-input-focus-border-color: var(--primary);
+  --ag-range-selection-border-color: var(--primary);
+  --ag-range-selection-background-color: var(--primary-soft);
+  --ag-active-color: var(--primary);
+}
+
+/* AG Grid 헤더 - 인디고 그라데이션 배경 */
+.ag-theme-quartz .ag-header {
+  background: linear-gradient(
+    135deg,
+    var(--primary) 0%,
+    var(--primary-hover) 100%
+  ) !important;
+  border-bottom: none;
+  font-weight: 600;
+}
+
+.ag-theme-quartz .ag-header-cell {
+  background: transparent !important;
+  border-right: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.ag-theme-quartz .ag-header-cell-label {
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: #fff;
+  font-size: 14px;
+  justify-content: center;
+  text-align: center;
+}
+
+.ag-theme-quartz .ag-header-cell-label .ag-header-cell-text {
+  text-align: center;
+}
+
+.ag-theme-quartz .ag-header-cell-text {
+  color: #fff;
+}
+
+.ag-theme-quartz .ag-header-icon {
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.ag-theme-quartz .ag-header-cell-sortable .ag-header-cell-label {
+  cursor: pointer;
+  color: #fff;
+}
+
+.ag-theme-quartz .ag-sort-ascending-icon,
+.ag-theme-quartz .ag-sort-descending-icon {
+  color: #fff;
+}
+
+/* AG Grid 행 스타일 */
+.ag-theme-quartz .ag-row {
+  border-bottom: 1px solid var(--border);
+  transition: background-color 0.15s ease;
+}
+
+/* 행 단위 그라데이션 - 3가지 패턴 순환 */
+.ag-theme-quartz .ag-row.row-gradient-1 {
+  background: linear-gradient(
+    90deg,
+    rgba(99, 102, 241, 0.08) 0%,
+    rgba(99, 102, 241, 0.02) 100%
+  ) !important;
+}
+
+.ag-theme-quartz .ag-row.row-gradient-2 {
+  background: linear-gradient(
+    90deg,
+    rgba(16, 185, 129, 0.08) 0%,
+    rgba(16, 185, 129, 0.02) 100%
+  ) !important;
+}
+
+.ag-theme-quartz .ag-row.row-gradient-3 {
+  background: linear-gradient(
+    90deg,
+    rgba(236, 72, 153, 0.08) 0%,
+    rgba(236, 72, 153, 0.02) 100%
+  ) !important;
+}
+
+/* 다크모드 그라데이션 */
+@media (prefers-color-scheme: dark) {
+  .ag-theme-quartz .ag-row.row-gradient-1 {
+    background: linear-gradient(
+      90deg,
+      rgba(129, 140, 248, 0.12) 0%,
+      rgba(129, 140, 248, 0.03) 100%
+    ) !important;
+  }
+
+  .ag-theme-quartz .ag-row.row-gradient-2 {
+    background: linear-gradient(
+      90deg,
+      rgba(52, 211, 153, 0.12) 0%,
+      rgba(52, 211, 153, 0.03) 100%
+    ) !important;
+  }
+
+  .ag-theme-quartz .ag-row.row-gradient-3 {
+    background: linear-gradient(
+      90deg,
+      rgba(244, 114, 182, 0.12) 0%,
+      rgba(244, 114, 182, 0.03) 100%
+    ) !important;
+  }
+}
+
+.ag-theme-quartz .ag-row:hover {
+  background: linear-gradient(
+    90deg,
+    var(--primary-soft) 0%,
+    transparent 100%
+  ) !important;
+}
+
+/* AG Grid 셀 스타일 */
+.ag-theme-quartz .ag-cell {
+  display: flex;
+  align-items: center;
+  font-size: 14px;
+}
+
+/* AG Grid 스크롤바 스타일 */
+.ag-theme-quartz ::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+.ag-theme-quartz ::-webkit-scrollbar-track {
+  background: var(--surface-hover);
+  border-radius: 4px;
+}
+
+.ag-theme-quartz ::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 4px;
+}
+
+.ag-theme-quartz ::-webkit-scrollbar-thumb:hover {
+  background: var(--text-muted);
+}
+
+/* AG Grid 정렬/필터 아이콘 색상 */
+.ag-theme-quartz .ag-header-cell-sortable .ag-header-cell-label {
+  cursor: pointer;
+}
+
+.ag-theme-quartz .ag-sort-ascending-icon,
+.ag-theme-quartz .ag-sort-descending-icon {
+  color: var(--primary);
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes popIn {
+  from {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@media (max-width: 640px) {
+  .app {
+    padding: 32px 16px;
+  }
+
+  .app-header h1 {
+    font-size: 1.5rem;
+  }
+
+  .numbers {
+    gap: 6px;
+  }
+
+  .ball {
+    width: 40px;
+    height: 40px;
+    font-size: 0.95rem;
+  }
+
+  .lottery-result {
+    padding: 20px;
+  }
+}
