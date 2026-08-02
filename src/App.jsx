@@ -10,6 +10,8 @@ import {
   computeAllStats,
   generateAIRecommendedNumbers,
 } from "./utils/lottoStats.js";
+import { hasSession, clearSession } from "./utils/auth.js";
+import Login from "./components/Login.jsx";
 
 // AG Grid 모듈 등록 (v33+ 필수)
 ModuleRegistry.registerModules([AllCommunityModule]);
@@ -92,11 +94,18 @@ function generateWeightedNumbers(weights) {
 }
 
 export default function App() {
+  const [isAuthenticated, setIsAuthenticated] = useState(() => hasSession());
   const [result, setResult] = useState(null);
   const [history, setHistory] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [selectedMode, setSelectedMode] = useState(null);
+
+  // 로그아웃
+  const handleLogout = useCallback(() => {
+    clearSession();
+    setIsAuthenticated(false);
+  }, []);
 
   // 각 생성 방법별 이론 설명
   const modeDescriptions = {
@@ -400,11 +409,18 @@ export default function App() {
     "row-gradient-3": (params) => params.node.rowIndex % 3 === 2,
   };
 
+  if (!isAuthenticated) {
+    return <Login onLoginSuccess={() => setIsAuthenticated(true)} />;
+  }
+
   return (
     <div className="app">
       <header className="app-header">
         <h1>🎱 동행복권 번호 생성기</h1>
         <p>1~45 사이의 번호 6개와 보너스 번호를 생성합니다</p>
+        <button type="button" className="logout-btn" onClick={handleLogout}>
+          로그아웃
+        </button>
       </header>
 
       <div className="controls">
