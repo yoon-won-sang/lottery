@@ -8,7 +8,7 @@
  * 사용법: node scripts/fetchLottoHistory.mjs
  */
 
-import { writeFileSync } from "node:fs";
+import { writeFileSync, readFileSync, existsSync } from "node:fs";
 import { resolve, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -90,13 +90,16 @@ function estimateLatestRound() {
 async function getLatestRound() {
   let estimate = estimateLatestRound();
 
-  // 추정치가 너무 크면 빈 리스트가 반환되므로 10씩 줄여가며 시도
-  for (let attempt = 0; attempt < 20; attempt++) {
-    const batch = await fetchBatch(estimate);
-    if (batch.length > 0) {
-      return Math.max(...batch.map((b) => b.drawNo));
+  // 추정치 주변(estimate + 2)부터 1씩 줄여가며 실제 존재하는 최신 회차를 탐색
+  for (let ep = estimate + 2; ep >= estimate - 20; ep--) {
+    try {
+      const batch = await fetchBatch(ep);
+      if (batch.length > 0) {
+        return Math.max(...batch.map((b) => b.drawNo));
+      }
+    } catch {
+      // 오류 시 계속 시도
     }
-    estimate -= 10;
   }
 
   throw new Error("최신 회차를 찾을 수 없습니다.");
@@ -109,14 +112,36 @@ async function main() {
 
   const allResults = new Map();
 
-  // 10개씩 가져오기 위해 epsd를 1, 11, 21, 31... 형태로 증가
-  // srchLtEpsd=N 은 N을 포함해 최신부터 10개를 반환하므로,
-  // N=1이면 10~1, N=11이면 20~11, N=21이면 30~21 ... 반환
-  for (let epsd = 1; epsd <= latestRound; epsd += 10) {
+  // 기존 파일이 있으면 먼저 로드하여 증분 업데이트
+  let startEpsd = 1;
+  if (existsSync(OUTPUT_PATH)) {
+    try {
+      const existingData = JSON.parse(readFileSync(OUTPUT_PATH, "utf-8"));
+      if (Array.isArray(existingData.draws)) {
+        for (const item of existingData.draws) {
+          allResults.set(item.drawNo, item);
+        }
+        const existingMax = Math.max(0, ...allResults.keys());
+        console.log(`📁 기존 데이터 로드: ${allResults.size}개 (최대 ${existingMax}회)`);
+
+        if (existingMax >= latestRound) {
+          console.log("✨ 이미 최신 회차까지 데이터가 존재합니다.");
+        } else {
+          // 기존 마지막 회차 전후부터 시작 (10개씩 가져오므로 약간 이전부터 안전하게)
+          startEpsd = Math.max(1, existingMax - 5);
+          console.log(`🚀 ${startEpsd}회부터 증분 수집을 시작합니다.`);
+        }
+      }
+    } catch (e) {
+      console.warn("⚠️ 기존 데이터 로드 실패, 전체 수집을 진행합니다:", e.message);
+    }
+  }
+
+  // 10개씩 가져오기 위해 epsd를 증가 (latestRound까지 확실히 포함)
+  for (let epsd = startEpsd; epsd <= latestRound + 5; epsd += 10) {
     const batch = await fetchBatch(epsd);
 
     for (const item of batch) {
-      // 최신 회차까지만 저장 (초과분 제외)
       if (item.drawNo >= 1 && item.drawNo <= latestRound) {
         allResults.set(item.drawNo, item);
       }
@@ -130,6 +155,20 @@ async function main() {
 
     // 서버 부하 방지
     await new Promise((r) => setTimeout(r, 200));
+  }
+
+  // 혹시 누락된 회차가 있다면 개별 보충 수집
+  for (let i = 1; i <= latestRound; i++) {
+    if (!allResults.has(i)) {
+      console.log(`🔍 누락된 ${i}회차 보충 수집 중...`);
+      const batch = await fetchBatch(i);
+      for (const item of batch) {
+        if (item.drawNo >= 1 && item.drawNo <= latestRound) {
+          allResults.set(item.drawNo, item);
+        }
+      }
+      await new Promise((r) => setTimeout(r, 200));
+    }
   }
 
   // 회차 순으로 정렬 (오래된 것부터)
